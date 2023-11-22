@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
+router.post("/contact", (req, res) => {
+  const { email, website, message } = req.body;
+  console.log(email + " | " + website + " | " + message);
+  res.send("Message Sent. Thank you");
+});
+
 router.get("/users", (req, res) => {
   const userData = [
     {

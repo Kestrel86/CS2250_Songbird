@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/contact", (req, res) => {
+  // const email = req.body.email;
+  // const website = req.body.website;
   const { email, website, message } = req.body;
   console.log(email + " | " + website + " | " + message);
   res.send("Message Sent. Thank you");
 });
 
-router.get("/users", (req, res) => {
+router.get("/users", async (req, res) => {
   const userData = [
     {
       id: 1,
@@ -78,6 +80,29 @@ router.get("/users", (req, res) => {
         bs: "e-enable strategic applications",
       },
     },
+    {
+      id: 4,
+      name: "Patricia Lebsack",
+      username: "Karianne",
+      email: "Julianne.OConner@kory.org",
+      address: {
+        street: "Hoeger Mall",
+        suite: "Apt. 692",
+        city: "South Elvis",
+        zipcode: "53919-4257",
+        geo: {
+          lat: "29.4572",
+          lng: "-164.2990",
+        },
+      },
+      phone: "493-170-9623 x156",
+      website: "kale.biz",
+      company: {
+        name: "Robel-Corkery",
+        catchPhrase: "Multi-tiered zero tolerance productivity",
+        bs: "transition cutting-edge web services",
+      },
+    },
   ];
 
   res.send(userData);
@@ -86,3 +111,5 @@ router.get("/users", (req, res) => {
 module.exports = router;
 
 //tell brybo
+
+// atm any changes made must restart the server

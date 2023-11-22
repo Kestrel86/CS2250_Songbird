@@ -1,27 +1,54 @@
 import logo from "./logo.svg";
 import "./App.css";
+import Router from "./components/Router";
+import Context from "./components/Context";
 
 function App() {
+  const userInfo = {
+    name: "Johnny",
+    email: "codrkai@gamil.com",
+    loggedIn: true,
+    cartItems: 4,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="text-3xl font-bold underline">Hello world!</p>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        ></a>
-      </header>
-    </div>
+    <>
+      <Context.Provider value={userInfo}>
+        <Router />
+      </Context.Provider>
+    </>
   );
 }
 
+// function App() {
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <img src={logo} className="App-logo" alt="logo" />
+//         <p className="text-3xl font-bold underline">Hello world!</p>
+//         <p>
+//           Edit <code>src/App.js</code> and save to reload.
+//         </p>
+//         <a
+//           className="App-link"
+//           href="https://reactjs.org"
+//           target="_blank"
+//           rel="noopener noreferrer"
+//         ></a>
+//       </header>
+//     </div>
+//   );
+// }
+
 export default App;
+
+/*
+Notes:
+Copied code from the tutorial to test what is gonna happen, including additions to the App.css to make myself not have a headache
+Following changes:
+ are the components folder, Contact.js, App.js, and the backend folder
+
+*/
 
 // please dont forget to use the .map js function for listing your parent
 // and child components. it will map from an array the total number of

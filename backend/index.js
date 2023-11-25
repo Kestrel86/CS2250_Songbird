@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const router = require("./routes/router");
+const mongoose = require('mongoose');
+require('dotenv/config')
 
 const app = express();
 
@@ -17,7 +19,11 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use("/", router);
 
-const port = 4000; //modifiable on localhost:____ port
+mongoose.connect(process.env.DB_URI)
+.then(() => console.log('DB connected!'))
+.catch(err => console.log(err))
+
+const port = process.env.PORT || 4000; //modifiable on localhost:____ port
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

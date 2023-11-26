@@ -36,7 +36,6 @@ function Contact() {
   //     })
   //     .catch(err => console.log(err))
   // }
-
   const axiosFetchData = async (processing) => {
     await axios
       .get("http://localhost:4000/users")
@@ -56,7 +55,7 @@ function Contact() {
     };
 
     await axios
-      .post("http://localhost:4000/contact", postData)
+      .post("http://localhost:4000/contact/send", postData)
       .then((res) => setError(<p className="success">{res.data}</p>));
   };
 

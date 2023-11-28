@@ -1,8 +1,7 @@
 import Header from "./Header";
-import Footer from "./Footer";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
-import MainPage from "../pages/main";
+import MainPage from "../pages/Main";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 export default function Router() {
@@ -13,7 +12,6 @@ export default function Router() {
         <div className="content">
           <Outlet />
         </div>
-        <Footer />
       </>
     );
   };

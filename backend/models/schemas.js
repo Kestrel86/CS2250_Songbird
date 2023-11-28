@@ -5,7 +5,13 @@ const userSchema = new Schema({
     name: {type:String},
     email: {type:String},
     password: {type:String},
-    website: {type:String},
+    entryDate: {type:Date, default:Date.now}
+})
+const supportSchema = new Schema({
+    name: {type:String, required:true},
+    email: {type:String, required:true},
+    message: {type:String, required:true},
+    donation: {type:Number, required:true},
     entryDate: {type:Date, default:Date.now}
 })
 
@@ -18,6 +24,7 @@ const contactSchema = new Schema({
 
 const Users = mongoose.model('Users', userSchema, 'users')
 const Contact = mongoose.model('Contact', contactSchema, 'contact_form')
-const mySchemas = {'Users':Users, 'Contact':Contact}
+const Support = mongoose.model('Support', supportSchema, 'support')
+const mySchemas = {'Users':Users, 'Contact':Contact, 'Support':Support}
 
 module.exports = mySchemas

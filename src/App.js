@@ -1,19 +1,22 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Contact from "./pages/Contact";
-import Main from "./pages/main";
+import "./App.css";
+import Router from "./components/Router";
+import Context from "./components/Context";
 
-export default function App() {
+function App() {
+  const userInfo = {
+    name: "Johnny",
+    email: "codrkai@gamil.com",
+    loggedIn: true,
+    cartItems: 4,
+  };
+
   return (
-    <div>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/songbird" element={<Main />} />
-          <Route path="*" element={<noPage />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <>
+      <Context.Provider value={userInfo}>
+        <Router />
+      </Context.Provider>
+    </>
   );
 }
+
+export default App;

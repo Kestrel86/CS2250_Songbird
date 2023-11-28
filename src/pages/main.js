@@ -1,5 +1,5 @@
 import "../assets/css/main.css";
-import "../assets/imgNotFound.jpg";
+import "./imgNotFound.jpg";
 
 function main() {
   return (

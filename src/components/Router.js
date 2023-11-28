@@ -1,10 +1,9 @@
 import Header from "./Header";
 import Footer from "./Footer";
-// import Home from "../pages/Home";
+import Home from "../pages/Home";
 import Contact from "../pages/Contact";
 import MainPage from "../pages/main";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
-// import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 export default function Router() {
   const Layout = () => {
@@ -24,6 +23,7 @@ export default function Router() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Home />} />
             <Route path="contact-us" element={<Contact />} />
             {<Route path="Songbird" element={<MainPage />} />}
           </Route>

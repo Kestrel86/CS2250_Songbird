@@ -1,8 +1,27 @@
+import Router from "./components/Router";
+// import Context from "./components/Context";
 import "./App.css";
 import "./imgNotFound.jpg";
 
 function App() {
+  // const userInfo = {
+  //   name: "Johnny",
+  //   email: "codrkai@gamil.com",
+  //   loggedIn: true,
+  //   cartItems: 4,
+  // };
+
+  // return (
+  //   <>
+  //     <Context.Provider>
+  //       <Router />
+  //     </Context.Provider>
+  //   </>
+  // );
   return (
+    <>
+      <Router />
+    </>
     <div className="App">
 		<div className="PlaylistContainer">
 			{Playlist()}

@@ -1,7 +1,7 @@
 import Header from "./Header";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
-import MainPage from "../pages/Main";
+import Songbird from "../pages/Songbird";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 export default function Router() {
@@ -23,33 +23,12 @@ export default function Router() {
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="contact-us" element={<Contact />} />
-            {<Route path="Songbird" element={<MainPage />} />}
+            {<Route path="Songbird" element={<Songbird />} />}
           </Route>
         </Routes>
       </BrowserRouter>
     );
   };
-
-  // this code shows how to program out the router using createBrowserRouter
-  // const BrowserRoutes = createBrowserRouter([
-  //     {
-  //         path: "/",
-  //         element: <Layout />,
-  //         children: [
-  //             {
-  //                 path: "/",
-  //                 element: <Home />
-  //             },
-  //             {
-  //                 path: "/contact-us",
-  //                 element: <Contact />
-  //             }
-  //         ]
-  //     }
-  // ])
-
-  // add this RouterProvider in the return statement if you plan on using the createBrowserRouter
-  // <RouterProvider router={BrowserRoutes} />
 
   return <BrowserRoutes />;
 }

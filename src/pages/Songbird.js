@@ -1,9 +1,9 @@
-import "../assets/css/main.css";
-import "./imgNotFound.jpg";
+import "../assets/css/App.css";
+import "../assets/imgNotFound.jpg";
 
-function main() {
+function App() {
   return (
-    <div className="main">
+    <div className="App">
       <div className="PlaylistContainer">{Playlist()}</div>
       <div className="PlayerTrackContainer">
         <div className="PlayerContainer">
@@ -141,7 +141,7 @@ function Playlist() {
               src={
                 item.images.length
                   ? item.images[item.images.length - 1].url
-                  : require("./imgNotFound.jpg")
+                  : require("../assets/imgNotFound.jpg")
               }
             />
             <span className="playlist_text">
@@ -187,7 +187,7 @@ function ProgressBar() {
 }
 
 function SongIcon() {
-  var cursong = require("./imgNotFound.jpg"); //img src
+  var cursong = require("../assets/imgNotFound.jpg"); //img src
   var cursongtitle = "cursongtitle";
   return (
     <div id="songIcon">
@@ -651,7 +651,7 @@ function Tracks() {
               src={
                 item.track.images
                   ? item.track.images[item.track.images.length - 1].url
-                  : require("./imgNotFound.jpg")
+                  : require("../assets/imgNotFound.jpg")
               }
             />
             <span className="tracks_text">
@@ -665,4 +665,4 @@ function Tracks() {
   );
 }
 
-export default main;
+export default App;

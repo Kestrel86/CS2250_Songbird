@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "../assets/css/contact.css";
 
 function Contact() {
   const [email, setEmail] = useState("");

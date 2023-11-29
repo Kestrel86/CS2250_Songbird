@@ -1,4 +1,4 @@
-import Header from "./Header";
+// import Header from "./Header";
 import Navbar from "./Navbar";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
@@ -10,9 +10,9 @@ export default function Router() {
     return (
       <>
         <Navbar />
-        <div className="content">
+        <main>
           <Outlet />
-        </div>
+        </main>
       </>
     );
   };
@@ -24,7 +24,7 @@ export default function Router() {
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="contact-us" element={<Contact />} />
-            {<Route path="Songbird" element={<Songbird />} />}
+            <Route path="Songbird" element={<Songbird />} />
           </Route>
         </Routes>
       </BrowserRouter>

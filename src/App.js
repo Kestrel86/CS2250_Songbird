@@ -1,6 +1,5 @@
-import "./App.css";
 import Router from "./components/Router";
-import Context from "./components/Context";
+// import Context from "./components/Context";
 
 function App() {
   // const userInfo = {
@@ -10,11 +9,16 @@ function App() {
   //   cartItems: 4,
   // };
 
+  // return (
+  //   <>
+  //     <Context.Provider>
+  //       <Router />
+  //     </Context.Provider>
+  //   </>
+  // );
   return (
     <>
-      <Context.Provider>
-        <Router />
-      </Context.Provider>
+      <Router />
     </>
   );
 }

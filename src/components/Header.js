@@ -25,3 +25,5 @@ export default function Header() {
     </nav>
   );
 }
+
+// this file may not be necessary anymore

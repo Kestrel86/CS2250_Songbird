@@ -1,4 +1,5 @@
 import Header from "./Header";
+import Navbar from "./Navbar";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
 import Songbird from "../pages/Songbird";
@@ -8,7 +9,7 @@ export default function Router() {
   const Layout = () => {
     return (
       <>
-        <Header />
+        <Navbar />
         <div className="content">
           <Outlet />
         </div>

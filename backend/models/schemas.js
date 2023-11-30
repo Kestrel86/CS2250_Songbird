@@ -11,7 +11,7 @@ const supportSchema = new Schema({
     name: {type:String, required:true},
     email: {type:String, required:true},
     message: {type:String, required:true},
-    donation: {type:Number, required:true},
+    donation: {type:String, required:true},
     entryDate: {type:Date, default:Date.now}
 })
 

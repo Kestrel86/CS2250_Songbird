@@ -4,6 +4,7 @@ import "../assets/css/contact.css";
 import Boxes from "../components/Boxes";
 
 function Contact() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -51,34 +52,35 @@ function Contact() {
 
   const axiosPostData = async () => {
     const postData = {
+      name: name,
       email: email,
-      website: selectValue,
+      donation: selectValue,
       message: message,
     };
 
     await axios
-      .post("http://localhost:4000/contact/send", postData)
+      .post("http://localhost:4000/support/send", postData)
       .then((res) => setError(<p className="success">{res.data}</p>));
   };
 
-  // const SelectDropdown = () => {
-  //   return (
-  //     <select
-  //       value={selectValue}
-  //       onChange={(e) => setSelectValue(e.target.value)}
-  //     >
-  //       <option value="" key="none">
-  //         {" "}
-  //         -- Select One --{" "}
-  //       </option>
-  //       {selectData?.map((item) => (
-  //         <option value={item.website} key={item.website}>
-  //           {item.website}
-  //         </option>
-  //       ))}
-  //     </select>
-  //   );
-  // };
+  const SelectDropdown = () => {
+    return (
+      <select
+        value={selectValue}
+        onChange={(e) => setSelectValue(e.target.value)}
+      >
+        <option value="" key="none">
+          {" "}
+          -- Select One --{" "}
+        </option>
+        {selectData?.map((item) => (
+          <option value={item.donation} key={item.donation}>
+            {item.donation}
+          </option>
+        ))}
+      </select>
+    );
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -100,6 +102,14 @@ function Contact() {
       <h1>Support Us!</h1>
 
       <form className="contactForm">
+      <label>UserName</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <label>Email</label>
         <input
           type="text"
@@ -108,9 +118,8 @@ function Contact() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        {/* 
         <label>How Did You Hear About Us?</label>
-        <SelectDropdown /> */}
+        <SelectDropdown /> {/* unleashed dropdown*/}
 
         <label>Message</label>
         <textarea

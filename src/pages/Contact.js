@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "../assets/css/contact.css";
+import Box from "../components/Box";
 
 function Contact() {
   const [email, setEmail] = useState("");
@@ -125,6 +126,9 @@ function Contact() {
           Submit
         </button>
       </form>
+      <div>
+        <Box />
+      </div>
     </>
   );
 }

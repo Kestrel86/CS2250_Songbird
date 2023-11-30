@@ -1,0 +1,26 @@
+.container {
+  list-style-type: none;
+  text-align: center;
+  justify-content: space-between;
+  margin: auto;
+}
+
+.items {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5rem;
+  padding: 5px;
+}
+
+.data {
+  position: relative;
+  height: 200px;
+  max-height: 250px;
+  width: 300px;
+  max-width: 300px;
+  border-style: solid;
+  border-image: linear-gradient(to bottom, lightblue, rgba(0, 0, 0, 0)) 1 100%;
+}

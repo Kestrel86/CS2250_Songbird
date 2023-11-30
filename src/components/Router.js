@@ -1,4 +1,3 @@
-// import Header from "./Header";
 import Navbar from "./Navbar";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
@@ -23,7 +22,7 @@ export default function Router() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="contact-us" element={<Contact />} />
+            <Route path="support-us" element={<Contact />} />
             <Route path="Songbird" element={<Songbird />} />
           </Route>
         </Routes>

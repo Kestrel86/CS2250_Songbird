@@ -1,52 +1,43 @@
-import "../assets/css/box.css";
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "./Box";
 import axios from "axios";
+import "../assets/css/box.css";
 
-//file where automatic generation occurs
-
-export default function Boxes(props) {
+export default function Boxes() {
   const [selectData, setSelectData] = useState([]);
-  const [selectValue, setSelectValue] = useState("");
-  const [boxes, setBoxes] = useState([]);
 
-  const { email, name, msg, donation } = props;
+  useEffect(() => {
+    let processing = true;
+    axiosFetchData(processing);
+    return () => {
+      processing = false;
+    };
+  }, []);
 
   const axiosFetchData = async (processing) => {
     await axios
-      .get("http://localhost:4000/users")
+      .get("http://localhost:4000/support")
       .then((res) => {
         if (processing) {
           setSelectData(res.data);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.log(err));
   };
 
   return (
     <div className="container">
       <h1>Sponsors:</h1>
       <div className="items">
-        {boxes?.map((email, name, msg, donation) => {
-          return (
-            <Box
-              email={props.email}
-              name={props.name}
-              msg={props.msg}
-              donation={props.donation}
-            />
-          );
-        })}
-        <Box />
+        {selectData?.map((item) => (
+          <Box
+            email={item.email}
+            name={item.name}
+            msg={item.message}
+            donation={item.donation}
+          />
+        ))}
       </div>
     </div>
   );
 }
-
-/*
-{events?.map((event, index) => {
-    return (
-      <Event key={index} {...event}/>
-    )
-  })}
-  */

@@ -39,6 +39,7 @@ function Contact() {
   //     })
   //     .catch(err => console.log(err))
   // }
+
   const axiosFetchData = async (processing) => {
     await axios
       .get("http://localhost:4000/users")
@@ -102,7 +103,7 @@ function Contact() {
       <h1>Support Us!</h1>
 
       <form className="contactForm">
-      <label>UserName</label>
+        <label>UserName</label>
         <input
           type="text"
           id="name"
@@ -120,7 +121,6 @@ function Contact() {
         />
         <label>How Did You Hear About Us?</label>
         <SelectDropdown /> {/* unleashed dropdown*/}
-
         <label>Message</label>
         <textarea
           id="message"
@@ -128,9 +128,7 @@ function Contact() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         ></textarea>
-
         {error}
-
         <button type="submit" onClick={handleSubmit}>
           Submit
         </button>

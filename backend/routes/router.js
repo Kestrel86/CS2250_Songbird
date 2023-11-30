@@ -34,7 +34,12 @@ router.post("/support/:a", async (req, res) => {
 
   switch (action) {
     case "send":
-      const supportData = { email: email, name: name, message: message, donation: donation };
+      const supportData = {
+        email: email,
+        name: name,
+        message: message,
+        donation: donation,
+      };
       const newSupport = new schemas.Support(supportData);
       const saveSupport = await newSupport.save();
       if (saveSupport) {
@@ -52,34 +57,38 @@ router.post("/support/:a", async (req, res) => {
   res.end();
 });
 
+router.get("/support", async (req, res) => {
+  const support = schemas.Support;
+
+  const supportData = await support.find({}).exec();
+  if (supportData) {
+    res.send(JSON.stringify(supportData));
+  }
+});
+
 router.get("/users", async (req, res) => {
   const users = schemas.Users;
-
-  // const userData = await users.find({}).exec()
-  // if (userData) {
-  //   res.send(JSON.stringify(userData))
-  // }
 
   const userData = [
     {
       id: 1,
-      donation: "$0.00"
+      donation: "$0.00",
     },
     {
       id: 2,
-      donation: "$1.00"
+      donation: "$1.00",
     },
     {
       id: 3,
-      donation: "$5.00"
+      donation: "$5.00",
     },
     {
       id: 4,
-      donation: "$10.00"
+      donation: "$10.00",
     },
     {
       id: 5,
-      donation: "$69.69"
+      donation: "$69.69",
     },
   ];
 
@@ -87,7 +96,3 @@ router.get("/users", async (req, res) => {
 });
 
 module.exports = router;
-
-//tell brybo
-
-// atm any changes made must restart the server

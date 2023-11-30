@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "../assets/css/contact.css";
-import Box from "../components/Box";
+import Boxes from "../components/Boxes";
 
 function Contact() {
   const [email, setEmail] = useState("");
@@ -127,7 +127,7 @@ function Contact() {
         </button>
       </form>
       <div>
-        <Box />
+        <Boxes />
       </div>
     </>
   );

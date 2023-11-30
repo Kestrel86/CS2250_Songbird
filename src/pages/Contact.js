@@ -60,24 +60,24 @@ function Contact() {
       .then((res) => setError(<p className="success">{res.data}</p>));
   };
 
-  const SelectDropdown = () => {
-    return (
-      <select
-        value={selectValue}
-        onChange={(e) => setSelectValue(e.target.value)}
-      >
-        <option value="" key="none">
-          {" "}
-          -- Select One --{" "}
-        </option>
-        {selectData?.map((item) => (
-          <option value={item.website} key={item.website}>
-            {item.website}
-          </option>
-        ))}
-      </select>
-    );
-  };
+  // const SelectDropdown = () => {
+  //   return (
+  //     <select
+  //       value={selectValue}
+  //       onChange={(e) => setSelectValue(e.target.value)}
+  //     >
+  //       <option value="" key="none">
+  //         {" "}
+  //         -- Select One --{" "}
+  //       </option>
+  //       {selectData?.map((item) => (
+  //         <option value={item.website} key={item.website}>
+  //           {item.website}
+  //         </option>
+  //       ))}
+  //     </select>
+  //   );
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -107,9 +107,9 @@ function Contact() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-
+        {/* 
         <label>How Did You Hear About Us?</label>
-        <SelectDropdown />
+        <SelectDropdown /> */}
 
         <label>Message</label>
         <textarea

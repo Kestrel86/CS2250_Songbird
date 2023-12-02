@@ -16,8 +16,7 @@ const supportSchema = new Schema({
 });
 
 const Users = mongoose.model("Users", userSchema, "users");
-const Contact = mongoose.model("Contact", contactSchema, "contact_form");
 const Support = mongoose.model("Support", supportSchema, "support");
-const mySchemas = { Users: Users, Contact: Contact, Support: Support };
+const mySchemas = { Users: Users, Support: Support };
 
 module.exports = mySchemas;

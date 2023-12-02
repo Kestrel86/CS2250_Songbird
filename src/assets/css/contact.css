@@ -17,6 +17,7 @@
 .contactForm {
   margin: 0 auto;
   display: block;
+  background-color: azure;
   width: 450px;
   padding: 40px;
   border-radius: 20px;
@@ -65,6 +66,17 @@
   color: royalblue;
   background-color: #ffffff;
   cursor: pointer;
+}
+
+.parallax {
+  background-image: url(../sky.jpg);
+
+  min-height: 420px; 
+
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size:cover;
 }
 
 .required {

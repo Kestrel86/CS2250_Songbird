@@ -98,7 +98,7 @@ router.get("/users", async (req, res) => {
     },
     {
       id: 8,
-      donation: "100.00",
+      donation: "$100.00",
     },
   ];
 

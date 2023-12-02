@@ -79,11 +79,11 @@ function Contact() {
 
   return (
     <>
-      <div>
+      <div className="parallax">
         <br />
-        <div className="card">
-          <h1 className="title">Support Us!</h1>
+        <div>
           <form className="contactForm">
+          <h1 className="title">Support Us!</h1>
             <label>Username</label>
             <input
               type="text"
@@ -116,6 +116,7 @@ function Contact() {
               Submit
             </button>
           </form>
+          <br />
         </div>
       </div>
       <div>

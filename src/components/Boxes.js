@@ -28,6 +28,7 @@ export default function Boxes() {
   return (
     <div className="container">
       <h1>Sponsors:</h1>
+      <br />
       <div className="items">
         {selectData?.map((item) => (
           <Box

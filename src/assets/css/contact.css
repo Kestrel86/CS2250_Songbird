@@ -1,123 +1,24 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.card {
+  width: 450px;
+  margin: auto;
+  justify-content: center;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  border: 5px solid #0000;
+  border-radius: 12px;
+  border-style: solid;
+  /* backdrop-filter: blur(5px); */
+  border-image: linear-gradient(to bottom, lightblue, rgba(0, 0, 0, 0)) 1 100%;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.nav-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background-color: #000000;
-  color: #ffffff;
-  opacity: 60%;
-}
-
-.nav-bar ul {
-  list-style: none;
-  display: flex;
-}
-
-.nav-bar ul li {
-  padding-left: 1rem;
-}
-
-.nav-bar a {
-  text-decoration: none;
-  color: #ffffff;
-}
-.nav-bar a:hover {
-  text-decoration: underline;
-}
-
-.footer {
-  display: flex;
-  padding: 40px;
-  font-size: 14px;
-  color: #000000;
-  justify-content: center;
-}
-
-.red {
-  color: red;
-}
-
-.blue {
-  color: blue;
-}
-
-.content {
-  padding: 40px;
-}
-
-.productBox {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 50px;
-}
-
-.productBox li {
+.title {
   text-align: center;
-}
-
-.productBox a {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.productBox a:hover {
-  color: #61dafb;
-}
-
-.productLink:hover img {
-  border: 2px solid #61dafb;
-}
-
-.productImage {
-  border: 2px solid lightgray;
-  border-radius: 20px;
-  width: 250px;
 }
 
 .contactForm {
   margin: 0 auto;
   display: block;
-  width: 400px;
-  background-color: #ffffff;
+  background-color: azure;
+  width: 450px;
   padding: 40px;
   border-radius: 20px;
   opacity: 75%;
@@ -149,7 +50,7 @@
 
 .contactForm select {
   display: block;
-  width: 400px;
+  width: 380px;
   padding: 10px;
   border-radius: 10px;
   border: 1px solid gray;
@@ -165,6 +66,17 @@
   color: royalblue;
   background-color: #ffffff;
   cursor: pointer;
+}
+
+.parallax {
+  background-image: url(../sky.jpg);
+
+  min-height: 420px; 
+
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size:cover;
 }
 
 .required {

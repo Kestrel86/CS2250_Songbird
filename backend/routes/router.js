@@ -3,8 +3,6 @@ const router = express.Router();
 const schemas = require("../models/schemas");
 
 router.post("/contact/:a", async (req, res) => {
-  // const email = req.body.email;
-  // const website = req.body.website;
   const { email, website, message } = req.body;
   const action = req.params.a;
 
@@ -72,7 +70,7 @@ router.get("/users", async (req, res) => {
   const userData = [
     {
       id: 1,
-      donation: "$0.00",
+      donation: "$0.01",
     },
     {
       id: 2,
@@ -88,7 +86,19 @@ router.get("/users", async (req, res) => {
     },
     {
       id: 5,
-      donation: "$69.69",
+      donation: "$15.00",
+    },
+    {
+      id: 6,
+      donation: "$25.00",
+    },
+    {
+      id: 7,
+      donation: "$50.00",
+    },
+    {
+      id: 8,
+      donation: "100.00",
     },
   ];
 

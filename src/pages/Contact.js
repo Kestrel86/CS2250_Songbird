@@ -19,27 +19,6 @@ function Contact() {
     };
   }, []);
 
-  // this code shows how to use the React fetch http for GET and POST
-  // const fetchData = async(processing) => {
-  //     const options = {
-  //         method: 'POST',
-  //         headers: {'Content-type': 'application/json'},
-  //         body: JSON.stringify({
-  //             email: email,
-  //             message: message
-  //         })
-  //     }
-  //
-  //     await fetch('https://jsonplaceholder.typicode.com/users')
-  //     .then(res => res.json())
-  //     .then(data => {
-  //         if (processing) {
-  //             setSelectData(data)
-  //         }
-  //     })
-  //     .catch(err => console.log(err))
-  // }
-
   const axiosFetchData = async (processing) => {
     await axios
       .get("http://localhost:4000/users")
@@ -100,39 +79,45 @@ function Contact() {
 
   return (
     <>
-      <h1>Support Us!</h1>
-
-      <form className="contactForm">
-        <label>UserName</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <label>Email</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label>How Did You Hear About Us?</label>
-        <SelectDropdown /> {/* unleashed dropdown*/}
-        <label>Message</label>
-        <textarea
-          id="message"
-          name="message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        ></textarea>
-        {error}
-        <button type="submit" onClick={handleSubmit}>
-          Submit
-        </button>
-      </form>
+      <div>
+        <br />
+        <div className="card">
+          <h1 className="title">Support Us!</h1>
+          <form className="contactForm">
+            <label>Username</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <label>Email</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label>
+              <b>Would You Kindly</b> Donate?
+            </label>
+            <SelectDropdown /> {/* unleashed dropdown*/}
+            <label>Message</label>
+            <textarea
+              id="message"
+              name="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            ></textarea>
+            {error}
+            <button type="submit" onClick={handleSubmit}>
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
       <div>
         <Boxes />
       </div>
@@ -141,7 +126,3 @@ function Contact() {
 }
 
 export default Contact;
-
-// http://localhost:3000/contact-us
-
-// I am missing certain files and components so this test does not look nice

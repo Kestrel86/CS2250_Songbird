@@ -1,668 +1,246 @@
 import "../assets/css/songbird.css";
 import "../assets/imgNotFound.jpg";
+import React, {useState, useEffect	} from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <div className="PlaylistContainer">{Playlist()}</div>
-      <div className="PlayerTrackContainer">
-        <div className="PlayerContainer">
-          {ProgressBar()}
-          {SongIcon()}
-        </div>
-        {Tracks()}
-      </div>
-    </div>
-  );
+const imgnotfound = require("../assets/imgNotFound.jpg")
+
+/* arbitrary hash function - used to generate keys for react elements */
+const cyrb53 = (str, seed = 0) => {
+	let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+	for(let i = 0, ch; i < str.length; i++) {
+		ch = str.charCodeAt(i);
+		h1 = Math.imul(h1 ^ ch, 2654435761);
+		h2 = Math.imul(h2 ^ ch, 1597334677);
+	}
+	h1  = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+	h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+	h2  = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+	h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  
+	return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+};
+
+function Songbird (props) {
+	const spotifyToken = props.token;
+
+
+	const [isActive, setActive] = useState(false);
+	const [isPaused, setPaused] = useState(false);
+
+	const [player, setPlayer] = useState(undefined);
+
+	const [playlistsContents, setPlaylistsContents] = useState((<div key="playlists">Bad Playlist Juju</div>));
+	const [tracksContents, setTracksContents] = useState((<div key="tracks">Bad Tracks Juju</div>));
+	const [progressBarContents, setProgressBarContents] = useState((<div key="progressbar">Bad progressbar Juju</div>));
+	const [songImageContents, setSongImageContents] = useState((<div key="songIcon">Bad songIcon Juju</div>));
+
+	useEffect(() => {
+		const script = document.createElement("script");
+		script.src = "https://sdk.scdn.co/spotify-player.js";
+		script.async = true;
+
+		document.body.appendChild(script);
+
+		window.onSpotifyWebPlaybackSDKReady = () => {
+			const player = new window.Spotify.Player({
+				name: 'Web Playback SDK',
+				getOAuthToken: cb => { cb(spotifyToken); },
+				volume: 0.5
+			});
+
+			setPlayer(player);
+
+			player.addListener('ready', ({ device_id }) => {
+				console.log('Ready with Device ID', device_id);
+			});
+
+			player.addListener('not_ready', ({ device_id }) => {
+				console.log('Device ID has gone offline', device_id);
+			});
+
+
+			player.connect();
+
+			player.addListener('player_state_changed', ( state => {
+				if (!state) {
+					return;
+				}
+
+				setPaused(state.paused);
+
+				player.getCurrentState().then(state => { 
+					(!state)? setActive(false) : setActive(true)
+				});
+			}));
+		};
+	}, [spotifyToken]);
+
+	/* this does need to be a separate useEffect hook, different dependencies
+	 * IMPORTANT: this is async. this is why we need the state variables, 
+	 * since this is the react-onic (pythonic but for react) way to pass
+	 * data back to the general scope. no, there's not a really better way to do this,
+	 * except obviously callbacks from a separate file altogether possibly.
+	 * it depends on spotifyToken, so it needs to be separate from other hooks, otherwise
+	 * it might run before that token is set
+	 */
+	useEffect(() => {
+		if (isActive){
+			Playlist(spotifyToken).then((res) => {
+				setPlaylistsContents(res);
+			})
+			.catch((err) => {
+				setPlaylistsContents((<div>Bad Juju</div>));
+			});
+			Tracks(spotifyToken).then((res) => {
+				setTracksContents(res);
+			})
+			.catch((err) => {
+				setTracksContents((<div>Bad Juju</div>));
+			});
+			SongIcon(player).then((res) => {
+				setSongImageContents(res);
+			})
+			.catch((err) => {
+				setSongImageContents((<div>BadJuju</div>));
+			});
+		}
+	});
+
+	return (			
+		<div className="App">
+			<div className="PlaylistContainer">
+				{playlistsContents}
+			</div>
+			<div className="PlayerTrackContainer">
+				<div className="PlayerContainer">
+					{progressBarContents}
+					{songImageContents}
+				</div>
+				{tracksContents}
+			</div>
+		</div>
+	);
 }
 
-async function getPlaylistData(userid, access_token) {
-  // GET request using fetch with async/await
-  const response = await fetch(
-    `https://api.spotify.com/v1/users/${userid}/playlists`,
-    {
-      headers: {
-        Authorization: `Bearer ${access_token.access_token}`,
-      },
-      method: "GET",
-    }
-  );
-  const data = await response.json();
-  return data;
+const getPlaylistData = (access_token) =>{
+	return fetch(`https://api.spotify.com/v1/me/playlists`, {
+		method: "GET", headers: { Authorization: `${access_token.token_type} ${access_token.token}` }
+	}).then(response => response.json())
 }
 
-function Playlist() {
-  // playlists is some GET @ api
-  // taken example from the spotify API example
-  // make sure this checks error code right when actually getting the Response obj
-
-  //var playlists = getPlaylistData(userid, access_token)
-  var playlists = {
-    href: "https://api.spotify.com/v1/me/shows?offset=0&limit=20",
-    limit: 20,
-    next: "https://api.spotify.com/v1/me/shows?offset=1&limit=1",
-    offset: 0,
-    previous: "https://api.spotify.com/v1/me/shows?offset=1&limit=1",
-    total: 4,
-    items: [
-      {
-        collaborative: false,
-        description: "desc",
-        external_urls: {
-          spotify: "external url spotify",
-        },
-        href: "href",
-        id: "id",
-        images: [
-          {
-            url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-            height: 300,
-            width: 300,
-          },
-        ],
-        name: "playlist name",
-        owner: {
-          external_urls: {
-            spotify: "string",
-          },
-          followers: {
-            href: "string",
-            total: 0,
-          },
-          href: "string",
-          id: "string",
-          type: "user",
-          uri: "string",
-          display_name: "author",
-        },
-        public: false,
-        snapshot_id: "string",
-        tracks: {
-          href: "string",
-          total: 0,
-        },
-        type: "always 'playlist' i think",
-        uri: "playlist url",
-      },
-      {
-        collaborative: false,
-        description: "desc2",
-        external_urls: {
-          spotify: "external url spotify",
-        },
-        href: "href",
-        id: "id",
-        images: [],
-        name: "playlist name 2",
-        owner: {
-          external_urls: {
-            spotify: "string",
-          },
-          followers: {
-            href: "string",
-            total: 0,
-          },
-          href: "string",
-          id: "string",
-          type: "user",
-          uri: "string",
-          display_name: "author2",
-        },
-        public: false,
-        snapshot_id: "string",
-        tracks: {
-          href: "string",
-          total: 0,
-        },
-        type: "always 'playlist' i think",
-        uri: "playlist url2",
-      },
-    ],
-  };
-
-  if (playlists.items === undefined) {
-    return (
-      <div>
-        No Playlists {typeof playlists} {Object.keys(playlists)}{" "}
-      </div>
-    );
-  }
-
-  return (
-    <div id="playlists">
-      {playlists.items.map((item) => {
-        return (
-          <div className="playlist_entry">
-            <img
-              className="playlist_img"
-              alt={item.name + " playlist image"}
-              width="50px"
-              height="50px"
-              src={
-                item.images.length
-                  ? item.images[item.images.length - 1].url
-                  : require("../assets/imgNotFound.jpg")
-              }
-            />
-            <span className="playlist_text">
-              {item.name} {item.description} {item.owner.display_name}
-            </span>
-            <br />
-          </div>
-        );
-      })}
-    </div>
-  );
+const Playlist = (access_token) => {
+	// playlists is some GET @ api
+	// taken example from the spotify API example
+	// make sure this checks error code right when actually getting the Response obv
+	return getPlaylistData(access_token).then((playlists) => {
+		if (playlists.items === undefined){
+			return (<div>No Playlists {typeof playlists} {Object.keys(playlists)} </div>)
+		} else {
+			return (
+				<div key="playlists" id="playlists">
+					{playlists.items.map(item => {
+						return (
+							<div key={cyrb53(JSON.stringify(item))} className="playlist_entry">
+								<img key={cyrb53(JSON.stringify(item.images))} className="playlist_img" alt={item.name + " playlist image"} src={item.images.length ? item.images[item.images.length-1].url : imgnotfound}/>
+								<span key={cyrb53(JSON.stringify({"name" : item.name, "description" : item.description}))} className="playlist_text">{item.name} {item.description} {item.owner.display_name}</span>
+								<br/>
+							</div>
+						)
+				})}
+				</div>
+			);
+		}
+	})	
 }
 
-function ProgressBar() {
-  var progvalue = 70;
-  var maxvalue = 100;
-  var currentSongName = "42 - Seinabo Sey";
-  var paused = false;
-  return (
-    <div id="progressBar">
-      <span id="progressBarCurrent">{currentSongName}</span>
-      <br />
-      <progress id="progressBarMeter" value={progvalue} max={maxvalue}>
-        {progvalue / maxvalue}%
-      </progress>
-      <br />
-      <span id="progressBarBack">Back </span>
-      <span
-        id="progressBarPause"
-        style={{ display: paused ? "none" : "inline" }}
-      >
-        Pause{" "}
-      </span>
-      <span
-        id="progressBarPlay"
-        style={{ display: !paused ? "none" : "inline" }}
-      >
-        Play{" "}
-      </span>
-      <span id="progressBarSkip">Skip</span>
-    </div>
-  );
+const getTrackData = (access_token, playlist_id) =>{
+	return fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
+		method: "GET", headers: { Authorization: `${access_token.token_type} ${access_token.token}` }
+	}).then(response => response.json())
 }
 
-function SongIcon() {
-  var cursong = require("../assets/imgNotFound.jpg"); //img src
-  var cursongtitle = "cursongtitle";
-  return (
-    <div id="songIcon">
-      <img id="songIconImg" src={cursong} alt={cursongtitle}></img>
-    </div>
-  );
+const Tracks = (access_token) => {	
+	return getCurrentlyPlayingData(access_token).then((nowplaying) => {
+		if (nowplaying.context === undefined){
+			return (<div>Pick a playlist or album!</div>)
+		}
+		const playlist_id = nowplaying.context.uri.split(":")[2];
+		
+		return getTrackData(access_token, playlist_id).then((tracks) => {
+			if (tracks.items === undefined){
+				return (<div>No tracks in this playlist/album </div>)
+			}
+
+			return (
+				<div id="tracks">
+					{tracks.items.map(item => {
+						return (
+							<div key={cyrb53(JSON.stringify(item))} className="tracks_entry">
+								<img key={cyrb53(JSON.stringify(item.track.album))} className="tracks_img" alt={item.track.name + " tracks image"} src={item.track.album.images[item.track.album.images.length-1].url}/>
+								<span key={cyrb53(item.track.name)} className="tracks_text">{item.track.name} {item.track.artists.name}</span>
+								<br/>
+							</div>
+						)
+				})}
+				</div>
+			);
+		})
+	});
 }
 
-function Tracks() {
-  var tracks = {
-    href: "https://api.spotify.com/v1/me/shows?offset=0&limit=20",
-    limit: 20,
-    next: "https://api.spotify.com/v1/me/shows?offset=1&limit=1",
-    offset: 0,
-    previous: "https://api.spotify.com/v1/me/shows?offset=1&limit=1",
-    total: 4,
-    items: [
-      {
-        added_at: "string",
-        added_by: {
-          external_urls: {
-            spotify: "string",
-          },
-          followers: {
-            href: "string",
-            total: 0,
-          },
-          href: "string",
-          id: "string",
-          type: "user",
-          uri: "string",
-        },
-        is_local: false,
-        track: {
-          album: {
-            album_type: "compilation",
-            total_tracks: 9,
-            available_markets: ["CA", "BR", "IT"],
-            external_urls: {
-              spotify: "string",
-            },
-            href: "string",
-            id: "2up3OPMp9Tb4dAKM2erWXQ",
-            images: [
-              {
-                url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-                height: 300,
-                width: 300,
-              },
-            ],
-            name: "string",
-            release_date: "1981-12",
-            release_date_precision: "year",
-            restrictions: {
-              reason: "market",
-            },
-            type: "album",
-            uri: "spotify:album:2up3OPMp9Tb4dAKM2erWXQ",
-            artists: [
-              {
-                external_urls: {
-                  spotify: "string",
-                },
-                href: "string",
-                id: "string",
-                name: "string",
-                type: "artist",
-                uri: "string",
-              },
-            ],
-          },
-          artists: [
-            {
-              external_urls: {
-                spotify: "string",
-              },
-              followers: {
-                href: "string",
-                total: 0,
-              },
-              genres: ["Prog rock", "Grunge"],
-              href: "string",
-              id: "string",
-              images: [
-                {
-                  url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-                  height: 300,
-                  width: 300,
-                },
-              ],
-              name: "string",
-              popularity: 0,
-              type: "artist",
-              uri: "string",
-            },
-          ],
-          available_markets: ["string"],
-          disc_number: 0,
-          duration_ms: 0,
-          explicit: false,
-          external_ids: {
-            isrc: "string",
-            ean: "string",
-            upc: "string",
-          },
-          external_urls: {
-            spotify: "string",
-          },
-          href: "string",
-          id: "string",
-          is_playable: false,
-          linked_from: {},
-          restrictions: {
-            reason: "string",
-          },
-          name: "string",
-          popularity: 0,
-          preview_url: "string",
-          track_number: 0,
-          type: "track",
-          uri: "string",
-          is_local: false,
-        },
-      },
-      {
-        added_at: "string",
-        added_by: {
-          external_urls: {
-            spotify: "string",
-          },
-          followers: {
-            href: "string",
-            total: 0,
-          },
-          href: "string",
-          id: "string",
-          type: "user",
-          uri: "string",
-        },
-        is_local: false,
-        track: {
-          album: {
-            album_type: "compilation",
-            total_tracks: 9,
-            available_markets: ["CA", "BR", "IT"],
-            external_urls: {
-              spotify: "string",
-            },
-            href: "string",
-            id: "2up3OPMp9Tb4dAKM2erWXQ",
-            images: [
-              {
-                url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-                height: 300,
-                width: 300,
-              },
-            ],
-            name: "string",
-            release_date: "1981-12",
-            release_date_precision: "year",
-            restrictions: {
-              reason: "market",
-            },
-            type: "album",
-            uri: "spotify:album:2up3OPMp9Tb4dAKM2erWXQ",
-            artists: [
-              {
-                external_urls: {
-                  spotify: "string",
-                },
-                href: "string",
-                id: "string",
-                name: "string",
-                type: "artist",
-                uri: "string",
-              },
-            ],
-          },
-          artists: [
-            {
-              external_urls: {
-                spotify: "string",
-              },
-              followers: {
-                href: "string",
-                total: 0,
-              },
-              genres: ["Prog rock", "Grunge"],
-              href: "string",
-              id: "string",
-              images: [
-                {
-                  url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-                  height: 300,
-                  width: 300,
-                },
-              ],
-              name: "string",
-              popularity: 0,
-              type: "artist",
-              uri: "string",
-            },
-          ],
-          available_markets: ["string"],
-          disc_number: 0,
-          duration_ms: 0,
-          explicit: false,
-          external_ids: {
-            isrc: "string",
-            ean: "string",
-            upc: "string",
-          },
-          external_urls: {
-            spotify: "string",
-          },
-          href: "string",
-          id: "string",
-          is_playable: false,
-          linked_from: {},
-          restrictions: {
-            reason: "string",
-          },
-          name: "string",
-          popularity: 0,
-          preview_url: "string",
-          track_number: 0,
-          type: "track",
-          uri: "string",
-          is_local: false,
-        },
-      },
-      {
-        added_at: "string",
-        added_by: {
-          external_urls: {
-            spotify: "string",
-          },
-          followers: {
-            href: "string",
-            total: 0,
-          },
-          href: "string",
-          id: "string",
-          type: "user",
-          uri: "string",
-        },
-        is_local: false,
-        track: {
-          album: {
-            album_type: "compilation",
-            total_tracks: 9,
-            available_markets: ["CA", "BR", "IT"],
-            external_urls: {
-              spotify: "string",
-            },
-            href: "string",
-            id: "2up3OPMp9Tb4dAKM2erWXQ",
-            images: [
-              {
-                url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-                height: 300,
-                width: 300,
-              },
-            ],
-            name: "string",
-            release_date: "1981-12",
-            release_date_precision: "year",
-            restrictions: {
-              reason: "market",
-            },
-            type: "album",
-            uri: "spotify:album:2up3OPMp9Tb4dAKM2erWXQ",
-            artists: [
-              {
-                external_urls: {
-                  spotify: "string",
-                },
-                href: "string",
-                id: "string",
-                name: "string",
-                type: "artist",
-                uri: "string",
-              },
-            ],
-          },
-          artists: [
-            {
-              external_urls: {
-                spotify: "string",
-              },
-              followers: {
-                href: "string",
-                total: 0,
-              },
-              genres: ["Prog rock", "Grunge"],
-              href: "string",
-              id: "string",
-              images: [
-                {
-                  url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-                  height: 300,
-                  width: 300,
-                },
-              ],
-              name: "string",
-              popularity: 0,
-              type: "artist",
-              uri: "string",
-            },
-          ],
-          available_markets: ["string"],
-          disc_number: 0,
-          duration_ms: 0,
-          explicit: false,
-          external_ids: {
-            isrc: "string",
-            ean: "string",
-            upc: "string",
-          },
-          external_urls: {
-            spotify: "string",
-          },
-          href: "string",
-          id: "string",
-          is_playable: false,
-          linked_from: {},
-          restrictions: {
-            reason: "string",
-          },
-          name: "string",
-          popularity: 0,
-          preview_url: "string",
-          track_number: 0,
-          type: "track",
-          uri: "string",
-          is_local: false,
-        },
-      },
-      {
-        added_at: "string",
-        added_by: {
-          external_urls: {
-            spotify: "string",
-          },
-          followers: {
-            href: "string",
-            total: 0,
-          },
-          href: "string",
-          id: "string",
-          type: "user",
-          uri: "string",
-        },
-        is_local: false,
-        track: {
-          album: {
-            album_type: "compilation",
-            total_tracks: 9,
-            available_markets: ["CA", "BR", "IT"],
-            external_urls: {
-              spotify: "string",
-            },
-            href: "string",
-            id: "2up3OPMp9Tb4dAKM2erWXQ",
-            images: [
-              {
-                url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-                height: 300,
-                width: 300,
-              },
-            ],
-            name: "string",
-            release_date: "1981-12",
-            release_date_precision: "year",
-            restrictions: {
-              reason: "market",
-            },
-            type: "album",
-            uri: "spotify:album:2up3OPMp9Tb4dAKM2erWXQ",
-            artists: [
-              {
-                external_urls: {
-                  spotify: "string",
-                },
-                href: "string",
-                id: "string",
-                name: "string",
-                type: "artist",
-                uri: "string",
-              },
-            ],
-          },
-          artists: [
-            {
-              external_urls: {
-                spotify: "string",
-              },
-              followers: {
-                href: "string",
-                total: 0,
-              },
-              genres: ["Prog rock", "Grunge"],
-              href: "string",
-              id: "string",
-              images: [
-                {
-                  url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
-                  height: 300,
-                  width: 300,
-                },
-              ],
-              name: "string",
-              popularity: 0,
-              type: "artist",
-              uri: "string",
-            },
-          ],
-          available_markets: ["string"],
-          disc_number: 0,
-          duration_ms: 0,
-          explicit: false,
-          external_ids: {
-            isrc: "string",
-            ean: "string",
-            upc: "string",
-          },
-          external_urls: {
-            spotify: "string",
-          },
-          href: "string",
-          id: "string",
-          is_playable: false,
-          linked_from: {},
-          restrictions: {
-            reason: "string",
-          },
-          name: "string",
-          popularity: 0,
-          preview_url: "string",
-          track_number: 0,
-          type: "track",
-          uri: "string",
-          is_local: false,
-        },
-      },
-    ],
-  };
-
-  if (tracks.items === undefined) {
-    return <div>No tracks </div>;
-  }
-
-  return (
-    <div id="tracks">
-      {tracks.items.map((item) => {
-        return (
-          <div className="tracks_entry">
-            <img
-              className="tracks_img"
-              alt={item.track.name + " tracks image"}
-              src={
-                item.track.images
-                  ? item.track.images[item.track.images.length - 1].url
-                  : require("../assets/imgNotFound.jpg")
-              }
-            />
-            <span className="tracks_text">
-              {item.track.name} {item.track.artists.name}
-            </span>
-            <br />
-          </div>
-        );
-      })}
-    </div>
-  );
+const getCurrentlyPlayingData = (access_token) =>{
+	return fetch(`https://api.spotify.com/v1/me/player`, {
+		method: "GET", headers: { Authorization: `${access_token.token_type} ${access_token.token}` }
+	}).then(response => response.json())
 }
 
-export default App;
+const ProgressBar = (access_token, player) => {
+	return getCurrentlyPlayingData(access_token).then((nowplaying) => {
+		if (nowplaying.item === undefined) {
+			return (<div key="progressbar" id="progressbar">
+			<span key="progressBarCurrent" id="progressBarCurrent">Nothing Playing!</span>
+			<br/>
+			<progress key="progressMeter" id="progressBarMeter"value={0} max={180}>{0}%</progress>
+			<br/>
+			<button key="progressBarBack" id="progressBarBack">Back  </button>
+			<button key="progressBarPause" id="progressBarPause">Play  </button>
+			<button key="progressBarSkip" id="progressBarSkip">Skip</button>
+		</div>)
+		}
+		return (
+		<div key="progressbar" id="progressbar">
+			<span key="progressBarCurrent" id="progressBarCurrent">{nowplaying.item.name}</span>
+			<br/>
+			<progress key="progressMeter" id="progressBarMeter"value={nowplaying.progress_ms} max={nowplaying.item.duration_ms}>{nowplaying.progress_ms/nowplaying.item.duration_ms}%</progress>
+			<br/>
+			<button key="progressBarBack" id="progressBarBack" onClick={() => { player.previousTrack() }}>Back </button>
+			<button key="progressBarPause" id="progressBarPause"onClick={() => { player.togglePlay() }}>{nowplaying.is_playing ? "Pause" : "Play"}  </button>
+			<button key="progressBarSkip" id="progressBarSkip" onClick={() => { player.nextTrack() }}>Skip</button>
+		</div>)
+	});
+}
+
+const SongIcon = (player) => {
+	return player.getCurrentState().then((state) => {
+		var handleClick = () => {
+			player.togglePlay().then(() => {
+				console.log('Toggled playback!');
+			  });
+		};
+
+		if (!state) {
+			return (<div key="songIcon" id="songIcon"><button onClick={handleClick}/><img key="songIconImg" id="songIconImg" href={imgnotfound} alt="not found"></img></div>)
+		}
+
+		var current_track = state.track_window.current_track;
+
+		return (
+			<div key="songIcon" id="songIcon">
+				<img key="songIconImg" id="songIconImg" onClick={handleClick} src={current_track.album.images[current_track.album.images.length-1].url} alt={current_track.name}></img>
+			</div>
+		);
+	});
+}
+
+
+export default Songbird;

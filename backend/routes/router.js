@@ -128,7 +128,7 @@ router.post("/contact/:a", async (req, res) => {
 
 router.get('/auth/login', async (req, res) => {
 
-	var scope = "streaming user-read-email user-read-private"
+	var scope = "user-read-currently-playing user-read-playback-state user-modify-playback-state streaming user-read-private user-read-email"
 	var state = generateRandomString(16);
 
 	var auth_query_parameters = new URLSearchParams({

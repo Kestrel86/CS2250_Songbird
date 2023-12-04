@@ -23,7 +23,6 @@ const cyrb53 = (str, seed = 0) => {
 function Songbird (props) {
 	const spotifyToken = props.token;
 
-
 	const [isActive, setActive] = useState(false);
 	const [isPaused, setPaused] = useState(false);
 
@@ -58,7 +57,6 @@ function Songbird (props) {
 				console.log('Device ID has gone offline', device_id);
 			});
 
-
 			player.connect();
 
 			player.addListener('player_state_changed', ( state => {
@@ -84,7 +82,7 @@ function Songbird (props) {
 	 * it might run before that token is set
 	 */
 	useEffect(() => {
-		if (isActive){
+		if (player !== undefined){
 			Playlist(spotifyToken).then((res) => {
 				setPlaylistsContents(res);
 			})
@@ -97,6 +95,12 @@ function Songbird (props) {
 			.catch((err) => {
 				setTracksContents((<div>Bad Juju</div>));
 			});
+			ProgressBar(spotifyToken, player).then((res) => {
+				setProgressBarContents(res);
+			})
+			.catch((err) => {
+				setProgressBarContents((<div>BadJuju</div>));
+			});
 			SongIcon(player).then((res) => {
 				setSongImageContents(res);
 			})
@@ -104,7 +108,7 @@ function Songbird (props) {
 				setSongImageContents((<div>BadJuju</div>));
 			});
 		}
-	});
+	}, [player, spotifyToken]);
 
 	return (			
 		<div className="App">
@@ -124,7 +128,7 @@ function Songbird (props) {
 
 const getPlaylistData = (access_token) =>{
 	return fetch(`https://api.spotify.com/v1/me/playlists`, {
-		method: "GET", headers: { Authorization: `${access_token.token_type} ${access_token.token}` }
+		method: "GET", headers: { Authorization: `Bearer ${access_token}` }
 	}).then(response => response.json())
 }
 
@@ -155,7 +159,7 @@ const Playlist = (access_token) => {
 
 const getTrackData = (access_token, playlist_id) =>{
 	return fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
-		method: "GET", headers: { Authorization: `${access_token.token_type} ${access_token.token}` }
+		method: "GET", headers: { Authorization: `Bearer ${access_token}` }
 	}).then(response => response.json())
 }
 
@@ -190,7 +194,7 @@ const Tracks = (access_token) => {
 
 const getCurrentlyPlayingData = (access_token) =>{
 	return fetch(`https://api.spotify.com/v1/me/player`, {
-		method: "GET", headers: { Authorization: `${access_token.token_type} ${access_token.token}` }
+		method: "GET", headers: { Authorization: `Bearer ${access_token}` }
 	}).then(response => response.json())
 }
 
@@ -223,13 +227,14 @@ const ProgressBar = (access_token, player) => {
 const SongIcon = (player) => {
 	return player.getCurrentState().then((state) => {
 		var handleClick = () => {
+
 			player.togglePlay().then(() => {
 				console.log('Toggled playback!');
 			  });
 		};
 
 		if (!state) {
-			return (<div key="songIcon" id="songIcon"><button onClick={handleClick}/><img key="songIconImg" id="songIconImg" href={imgnotfound} alt="not found"></img></div>)
+			return (<div key="songIcon" id="songIcon"><img onClick={handleClick}key="songIconImg" id="songIconImg" href={imgnotfound} alt="not found"></img></div>)
 		}
 
 		var current_track = state.track_window.current_track;

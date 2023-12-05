@@ -21,7 +21,7 @@ function Contact() {
 
   const axiosFetchData = async (processing) => {
     await axios
-      .get("http://localhost:4000/users")
+      .get("https://songbird.onrender.com/users")
       .then((res) => {
         if (processing) {
           setSelectData(res.data);
@@ -39,7 +39,7 @@ function Contact() {
     };
 
     await axios
-      .post("http://localhost:4000/support/send", postData)
+      .post("https://songbird.onrender.com/support/send", postData)
       .then((res) => setError(<p className="success">{res.data}</p>));
   };
 
@@ -83,7 +83,7 @@ function Contact() {
         <br />
         <div>
           <form className="contactForm">
-          <h1 className="title">Support Us!</h1>
+            <h1 className="title">Support Us!</h1>
             <label>Username</label>
             <input
               type="text"

@@ -16,7 +16,7 @@ export default function Boxes() {
 
   const axiosFetchData = async (processing) => {
     await axios
-      .get("http://localhost:4000/support")
+      .get("https://songbird.onrender.com/support")
       .then((res) => {
         if (processing) {
           setSelectData(res.data);

@@ -93,6 +93,7 @@ function Songbird (props) {
 				setTracksContents(res);
 			})
 			.catch((err) => {
+				console.log(err);
 				setTracksContents((<div>Bad Juju</div>));
 			});
 			ProgressBar(spotifyToken, player).then((res) => {
@@ -146,7 +147,7 @@ const Playlist = (access_token) => {
 						return (
 							<div key={cyrb53(JSON.stringify(item))} className="playlist_entry">
 								<img key={cyrb53(JSON.stringify(item.images))} className="playlist_img" alt={item.name + " playlist image"} src={item.images.length ? item.images[item.images.length-1].url : imgnotfound}/>
-								<span key={cyrb53(JSON.stringify({"name" : item.name, "description" : item.description}))} className="playlist_text">{item.name} {item.description} {item.owner.display_name}</span>
+								<span key={cyrb53(JSON.stringify({"name" : item.name, "description" : item.description}))} className="playlist_text">{item.name} {item.owner.display_name}</span>
 								<br/>
 							</div>
 						)
@@ -163,44 +164,62 @@ const getTrackData = (access_token, playlist_id) =>{
 	}).then(response => response.json())
 }
 
-const Tracks = (access_token) => {	
-	return getCurrentlyPlayingData(access_token).then((nowplaying) => {
-		if (nowplaying.context === undefined){
-			return (<div>Pick a playlist or album!</div>)
-		}
-		const playlist_id = nowplaying.context.uri.split(":")[2];
-		
-		return getTrackData(access_token, playlist_id).then((tracks) => {
-			if (tracks.items === undefined){
-				return (<div>No tracks in this playlist/album </div>)
-			}
+const Tracks = (access_token) => {    
+    try {
+    return getCurrentlyPlayingData(access_token).then((nowplaying) => {
+        if (nowplaying.context === undefined){
+            return (<div>Pick a playlist or album!</div>)
+        }
+        const playlist_id = nowplaying.context.uri.split(":")[2];
+        
+        return getTrackData(access_token, playlist_id).then((tracks) => {
+            if (tracks.items === undefined){
+                return (<div>No tracks in this playlist/album </div>)
+            }
 
-			return (
-				<div id="tracks">
-					{tracks.items.map(item => {
-						return (
-							<div key={cyrb53(JSON.stringify(item))} className="tracks_entry">
-								<img key={cyrb53(JSON.stringify(item.track.album))} className="tracks_img" alt={item.track.name + " tracks image"} src={item.track.album.images[item.track.album.images.length-1].url}/>
-								<span key={cyrb53(item.track.name)} className="tracks_text">{item.track.name} {item.track.artists.name}</span>
-								<br/>
-							</div>
-						)
-				})}
-				</div>
-			);
-		})
-	});
+            return (
+                <div id="tracks">
+                    {tracks.items.map(item => {
+                        return (
+                            <div key={cyrb53(JSON.stringify(item))} className="tracks_entry">
+                                <img key={cyrb53(JSON.stringify(item.track.album))} className="tracks_img" alt={item.track.name + " tracks image"} src={item.track.album.images[item.track.album.images.length-1].url}/>
+                                <span key={cyrb53(item.track.name)} className="tracks_text">{item.track.name} {item.track.artists.name}</span>
+                                <br/>
+                            </div>
+                        )
+                })}
+                </div>
+            );
+        })
+    });
+    }
+    catch {
+        return (<div>Pick a playlist or album!</div>)
+    }
 }
 
 const getCurrentlyPlayingData = (access_token) =>{
-	return fetch(`https://api.spotify.com/v1/me/player`, {
+    return fetch(`https://api.spotify.com/v1/me/player`, {
+        method: "GET", headers: { Authorization: `Bearer ${access_token}` }
+    }).then(response => {
+        try {
+            return response.json()
+        } catch {
+			console.log("fuck you");
+            return {"fuck" : "you"};
+        }
+    })
+}
+
+const getTrackDuration = (access_token) =>{
+	return fetch(`https://api.spotify.com/v1/tracks/{id}`, {
 		method: "GET", headers: { Authorization: `Bearer ${access_token}` }
 	}).then(response => response.json())
 }
 
 const ProgressBar = (access_token, player) => {
-	return getCurrentlyPlayingData(access_token).then((nowplaying) => {
-		if (nowplaying.item === undefined) {
+	return player.getCurrentState().then(state => { 
+		if (!state || state.track_window.current_track === undefined) {
 			return (<div key="progressbar" id="progressbar">
 			<span key="progressBarCurrent" id="progressBarCurrent">Nothing Playing!</span>
 			<br/>
@@ -211,41 +230,33 @@ const ProgressBar = (access_token, player) => {
 			<button key="progressBarSkip" id="progressBarSkip">Skip</button>
 		</div>)
 		}
+		getTrackDuration(access_token).then((trackDuration) => {
+			console.log(trackDuration);
 		return (
 		<div key="progressbar" id="progressbar">
-			<span key="progressBarCurrent" id="progressBarCurrent">{nowplaying.item.name}</span>
+			<span key="progressBarCurrent" id="progressBarCurrent">{player.current_track.name}</span>
 			<br/>
-			<progress key="progressMeter" id="progressBarMeter"value={nowplaying.progress_ms} max={nowplaying.item.duration_ms}>{nowplaying.progress_ms/nowplaying.item.duration_ms}%</progress>
+			<progress key="progressMeter" id="progressBarMeter"value={player.position} max={player.track_window.current_track}>{player.position/trackDuration.duration_ms}%</progress>
 			<br/>
 			<button key="progressBarBack" id="progressBarBack" onClick={() => { player.previousTrack() }}>Back </button>
-			<button key="progressBarPause" id="progressBarPause"onClick={() => { player.togglePlay() }}>{nowplaying.is_playing ? "Pause" : "Play"}  </button>
+			<button key="progressBarPause" id="progressBarPause"onClick={() => { player.togglePlay() }}>{player.paused ? "Pause" : "Play"}  </button>
 			<button key="progressBarSkip" id="progressBarSkip" onClick={() => { player.nextTrack() }}>Skip</button>
 		</div>)
 	});
+});
 }
 
-const SongIcon = (player) => {
-	return player.getCurrentState().then((state) => {
-		var handleClick = () => {
-
-			player.togglePlay().then(() => {
-				console.log('Toggled playback!');
-			  });
-		};
-
-		if (!state) {
-			return (<div key="songIcon" id="songIcon"><img onClick={handleClick}key="songIconImg" id="songIconImg" href={imgnotfound} alt="not found"></img></div>)
+const SongIcon = (access_token) => {
+	return getCurrentlyPlayingData(access_token).then((nowplaying) => {
+		if (nowplaying.item === undefined){
+			return (<div key="songIcon" id="songIcon"><span key="songIconImg">Play a song!</span></div>);
 		}
-
-		var current_track = state.track_window.current_track;
-
 		return (
 			<div key="songIcon" id="songIcon">
-				<img key="songIconImg" id="songIconImg" onClick={handleClick} src={current_track.album.images[current_track.album.images.length-1].url} alt={current_track.name}></img>
+				<img key="songIconImg" id="songIconImg" src={nowplaying.item.album.images[nowplaying.item.album.images.length-1].url} alt={nowplaying.item.name}></img>
 			</div>
 		);
 	});
 }
-
 
 export default Songbird;

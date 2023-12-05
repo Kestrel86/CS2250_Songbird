@@ -10,8 +10,13 @@
   border-image: linear-gradient(to bottom, lightblue, rgba(0, 0, 0, 0)) 1 100%;
 }
 
-.title {
+.titleC {
   text-align: center;
+  color: black;
+}
+
+.cText {
+  color: black;
 }
 
 .contactForm {

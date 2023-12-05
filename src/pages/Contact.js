@@ -83,8 +83,8 @@ function Contact() {
         <br />
         <div>
           <form className="contactForm">
-          <h1 className="title">Support Us!</h1>
-            <label>Username</label>
+          <h1 className="titleC">Support Us!</h1>
+            <label className="cText">Username</label>
             <input
               type="text"
               id="name"
@@ -92,7 +92,7 @@ function Contact() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <label>Email</label>
+            <label className="cText">Email</label>
             <input
               type="text"
               id="email"
@@ -100,11 +100,11 @@ function Contact() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <label>
+            <label className="cText">
               <b>Would You Kindly</b> Donate?
-            </label>
+            </label >
             <SelectDropdown /> {/* unleashed dropdown*/}
-            <label>Message</label>
+            <label className="cText">Message</label>
             <textarea
               id="message"
               name="message"

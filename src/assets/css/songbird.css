@@ -1,6 +1,6 @@
 .App {
-	text-align: center;
-	font-size: 2.5vh;
+  text-align: center;
+  font-size: 2.5vh;
   display: flex;
   flex-direction: row;
 }
@@ -11,37 +11,41 @@
   height: 100vh;
 }
 
-.PlaylistContainer{
+.PlaylistContainer {
   display: flex;
   flex-direction: row;
-  width: 30vw;
+  width: 25vw;
   margin-left: 2vw;
+  /* 30vw */
 }
 
-.ControlsContainer{
+.ControlsContainer {
   display: flex;
   flex-direction: column;
 }
 
-.PlayerTrackContainer{
+.PlayerTrackContainer {
   margin-top: 2vh;
   margin-right: 3vw;
   display: flex;
   flex-direction: column;
-  width: 70vw
+  width: 70vw;
+  background-color: #333;
 }
 
-.PlayerContainer{
+.PlayerContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
+
 .playlist_entry {
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 10vh;
+  box-shadow: 0 0 20px rgba(7, 94, 142, 0.3);
 }
 
 .playlist_img {
@@ -53,11 +57,14 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background-color: rgba(45, 45, 48, 0.3); /* #4a97df */
+  padding: 5px;
 }
 
 .tracks_img {
   width: 5vw;
   margin-right: 15px;
+  border-radius: 10px;
 }
 
 .tracks_entry {
@@ -66,15 +73,20 @@
   justify-content: left;
   align-items: center;
   height: 15vh;
+  text-align: center;
+  background-color: #333;
+  padding: 10px;
+
+  box-shadow: 0 0 20px rgba(2, 2, 40, 0.3);
 }
 
 #progressBar {
-  width:100vw;
+  width: 100vw;
 }
 
 #progressBarMeter {
-  width:40vw;
-  height:1vh;
+  width: 40vw;
+  height: 1vh;
 }
 
 #songIcon {
@@ -83,5 +95,5 @@
 }
 
 #songIconImg {
-	height: 35vh;
-  }
+  height: 35vh;
+}

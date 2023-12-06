@@ -18,17 +18,13 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use("/", router);
-// const dbOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-/*mongoose
+
+mongoose
   .connect(process.env.DB_URI)
   .then(() => console.log("DB connected!"))
   .catch((err) => console.log(err));
-*/
+
 const port = process.env.PORT || 4000; //modifiable on localhost:____ port
 const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-//Video at 13 minutes
-
-//REact backend video by Codr kai

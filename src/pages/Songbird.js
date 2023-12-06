@@ -59,6 +59,7 @@ function Songbird (props) {
 				console.log('Device ID has gone offline', device_id);
 			});
 
+      player.setVolume(0.2);
 			player.connect();
 			player.activateElement();
 

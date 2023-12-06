@@ -20,13 +20,14 @@ const Home = () => {
       </header>
       <section className="project-introduction">
         <p>
-          SongBird is a music streaming platform designed to offer an immersive and enjoyable
-          musical experience. Whether you're into chart-toppers or indie gems, we've got your
-          playlist covered.
+          SongBird is a music streaming platform designed to offer an immersive
+          and enjoyable musical experience. Whether you're into chart-toppers or
+          indie gems, we've got your playlist covered.
         </p>
         <p>
-          This project is part of the CS2250 class, where we explore the principles of software
-          development and create our version of a music streaming service.
+          This project is part of the CS2250 class, where we explore the
+          principles of software development and create our version of a music
+          streaming service.
         </p>
       </section>
       <section className="project-features">

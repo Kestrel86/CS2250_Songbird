@@ -1,7 +1,8 @@
 import Navbar from "./Navbar";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
-import Songbird from "../pages/Songbird";
+import Main from "../pages/Main";
+import Login from "../pages/Login";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 export default function Router() {
@@ -23,7 +24,8 @@ export default function Router() {
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="support-us" element={<Contact />} />
-            <Route path="Songbird" element={<Songbird />} />
+            <Route path="Songbird" element={<Main />} />
+            <Route path="Login" element={<Login />} />
           </Route>
         </Routes>
       </BrowserRouter>

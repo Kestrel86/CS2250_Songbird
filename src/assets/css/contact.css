@@ -76,12 +76,12 @@
 .parallax {
   background-image: url(../sky.jpg);
 
-  min-height: 420px; 
+  min-height: 420px;
 
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
 }
 
 .required {

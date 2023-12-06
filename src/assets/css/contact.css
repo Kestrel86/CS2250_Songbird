@@ -10,8 +10,13 @@
   border-image: linear-gradient(to bottom, lightblue, rgba(0, 0, 0, 0)) 1 100%;
 }
 
-.title {
+.titleC {
   text-align: center;
+  color: black;
+}
+
+.cText {
+  color: black;
 }
 
 .contactForm {
@@ -71,12 +76,12 @@
 .parallax {
   background-image: url(../sky.jpg);
 
-  min-height: 420px; 
+  min-height: 420px;
 
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
 }
 
 .required {

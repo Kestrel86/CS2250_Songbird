@@ -16,12 +16,6 @@
   flex-direction: row;
   width: 25vw;
   margin-left: 2vw;
-  /* 30vw */
-}
-
-.ControlsContainer {
-  display: flex;
-  flex-direction: column;
 }
 
 .PlayerTrackContainer {
@@ -85,15 +79,20 @@
 }
 
 #progressBarMeter {
-  width: 40vw;
+  width: 60vw;
   height: 1vh;
 }
 
 #songIcon {
-  width: 15vw;
-  height: 15vh;
+  margin-left: -10px;
 }
 
 #songIconImg {
-  height: 35vh;
+  width: 5vw;
+  height: 10vh;
+}
+
+.ControlsContainer {
+  display: flex;
+  flex-direction: column;
 }

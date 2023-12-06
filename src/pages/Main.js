@@ -8,9 +8,7 @@ function Main() {
   useEffect(() => {
     async function getToken() {
       try {
-        const response = await fetch(
-          "https://songbird.onrender.com/auth/token"
-        );
+        const response = await fetch("http://localhost:4000/auth/token");
         const json = await response.json();
         setToken(json.access_token);
       } catch {}

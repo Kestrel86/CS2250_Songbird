@@ -11,7 +11,7 @@ dotenv.config();
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-var spotify_redirect_uri = "http://localhost:4000/auth/callback";
+var spotify_redirect_uri = "https://songbird.onrender.com/auth/callback";
 
 var generateRandomString = function (length) {
   var text = "";
@@ -170,7 +170,7 @@ router.get("/auth/callback", (req, res) => {
     if (!error && response.statusCode === 200) {
       access_token = body.access_token;
       console.log(access_token);
-      res.redirect("http://localhost:3000/songbird");
+      res.redirect("https://songbird-frontend.onrender.com/songbird");
     }
   });
 });

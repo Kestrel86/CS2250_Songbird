@@ -4,9 +4,16 @@ body {
 }
 
 .home-container {
+  padding: 50px;
   margin: 0;
   font-family: "Roboto", sans-serif;
-  background-color: #1a1a1a;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(60, 60, 115, 1) 50%,
+    rgb(2, 0, 36, 1) 100%
+  );
   color: #fff;
 }
 
@@ -27,23 +34,31 @@ header {
 }
 
 .project-introduction {
-  font-size: 1.2em;
+  font-size: 1.4em;
   margin-bottom: 30px;
 }
 
 .feature-container {
-  display: flex;
+  display: block;
   justify-content: space-around;
   padding: 40px;
 }
 
 .feature {
+  border-style: solid;
+  border-image: linear-gradient(to bottom, lightblue, rgba(0, 0, 0, 0)) 1 100%;
   text-align: center;
-  background-color: #333;
+  background-color: transparent;
   padding: 20px;
+  font-size: x-large;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease-in-out;
+}
+
+.feature-1 {
+  width: 300px;
+  height: 300px;
 }
 
 .feature:hover {
@@ -60,4 +75,16 @@ header {
 h2 {
   font-size: 1.5em;
   margin-bottom: 10px;
+}
+
+.title {
+  text-align: center;
+}
+
+.project-introduction {
+  text-align: center;
+}
+
+.title_box {
+  /* background-color: #333; */
 }

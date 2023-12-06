@@ -19,12 +19,21 @@
 }
 
 .PlayerTrackContainer {
-  /* margin-top: 2vh;
+  margin-top: 2vh;
   margin-right: 3vw;
   display: flex;
   flex-direction: column;
   width: 70vw;
-  background-color: #333; */
+  
+  
+}
+
+.PlayerContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  
   margin-top: 2vh;
   margin-right: 3vw;
   display: flex;
@@ -33,13 +42,6 @@
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
   background: linear-gradient(to right, #fe8c00, #f83600);
   border-radius: 15px;
-}
-
-.PlayerContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .playlist_entry {

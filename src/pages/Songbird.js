@@ -27,6 +27,7 @@ function Songbird (props) {
 	const [time, setTime] = useState(Date.now());
 
 	const [player, setPlayer] = useState(undefined);
+	const [volume, setVolume] = useState(10);
 
 	const [playlistsContents, setPlaylistsContents] = useState((<div key="playlists">Bad Playlist Juju</div>));
 	const [tracksContents, setTracksContents] = useState((<div key="tracks">Bad Tracks Juju</div>));
@@ -44,7 +45,7 @@ function Songbird (props) {
 			const player = new window.Spotify.Player({
 				name: 'Web Playback SDK',
 				getOAuthToken: cb => { cb(spotifyToken); },
-				volume: 0.5
+				volume: volume/100
 			});
 
 			setPlayer(player);
@@ -90,7 +91,7 @@ function Songbird (props) {
 	 * it might run before that token is set
 	 */
 	useEffect(() => {
-		if (player !== undefined){
+		if (!!player){
 			Playlist(spotifyToken).then((res) => {
 				setPlaylistsContents(res);
 			})
@@ -113,7 +114,15 @@ function Songbird (props) {
 			</div>
 			<div className="PlayerTrackContainer">
 				<div className="PlayerContainer">
-					{progressBarContents}
+					<div className="ControlsContainer">
+						<input type="range" min={0} max={100} step={1} value={volume}
+							onChange={event => {
+								var v = event.target.valueAsNumber
+								setPlayerVolume(spotifyToken, v);
+								setVolume(v);
+							}}
+							/>
+					</div>
 					{songImageContents}
 				</div>
 				{tracksContents}
@@ -133,7 +142,7 @@ const Playlist = (access_token) => {
 	// taken example from the spotify API example
 	// make sure this checks error code right when actually getting the Response obv
 	return getPlaylistData(access_token).then((playlists) => {
-		if (playlists.items === undefined){
+		if (!playlists.items){
 			return (<div>No Playlists {typeof playlists} {Object.keys(playlists)} </div>)
 		} else {
 			return (
@@ -165,14 +174,14 @@ const getTrackData = (access_token, playlist_id) =>{
 
 const Tracks = (access_token) => {    
     return getCurrentlyPlayingData(access_token).then((nowplaying) => {
-        if (nowplaying === undefined || nowplaying.context === undefined){
+        if (!nowplaying || !nowplaying.context){
             return (<div>Pick a playlist or album!</div>)
         }
         const playlist_id = nowplaying.context.uri.split(":")[2];
         
         return getTrackData(access_token, playlist_id).then((tracks) => {
 
-            if (tracks.items === undefined){
+            if (!tracks.items){
                 return (<div>No tracks in this playlist/album </div>)
             }
 
@@ -207,11 +216,21 @@ const getCurrentlyPlayingData = (access_token) =>{
 }
 
 const TransferPlayback = (access_token, device_id) =>{
-    return fetch(`https://api.spotify.com/v1/me/player`, {
-        method: "PUT", headers: { Authorization: `Bearer ${access_token}` }, body: {device_ids: [device_id], play:true}
+	return fetch(`https://api.spotify.com/v1/me/player`, {
+        method: "PUT", headers: { Authorization: `Bearer ${access_token}` }, body: JSON.stringify({device_ids: [device_id]})
     }).then(response => {
         return response.json().catch ((err) => {
-			return {"context" : undefined};
+			return {"body" : undefined};
+        })
+    })
+}
+
+const setPlayerVolume = (access_token, percent) =>{
+	return fetch(`https://api.spotify.com/v1/me/player/volume?volume_percent=${percent}`, {
+        method: "PUT", headers: { Authorization: `Bearer ${access_token}`}
+    }).then(response => {
+        return response.json().catch ((err) => {
+			return {"body" : undefined};
         })
     })
 }
@@ -224,7 +243,7 @@ const getTrackDuration = (access_token, id) =>{
 
 const ProgressBar = (access_token, player) => {
 	return player.getCurrentState().then(state => { 
-		if (!state || state.track_window.current_track === undefined) {
+		if (!state || !state.track_window.current_track) {
 			return (<div key="progressbar" id="progressbar">
 			<span key="progressBarCurrent" id="progressBarCurrent">Nothing Playing!</span>
 			<br/>
@@ -253,7 +272,7 @@ const ProgressBar = (access_token, player) => {
 
 const SongIcon = (player) => {
 	return player.getCurrentState().then((state) => {
-		if (!state || state === undefined || state.track_window.current_track === undefined){
+		if (!state || !state.track_window.current_track){
 			return (<div key="songIcon" id="songIcon"><span key="songIconImg">Play a song!</span></div>);
 		}
 		return (

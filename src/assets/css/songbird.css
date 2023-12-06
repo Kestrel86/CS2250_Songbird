@@ -25,7 +25,6 @@
   flex-direction: column;
   width: 70vw;
   
-  
 }
 
 .PlayerContainer {
@@ -121,13 +120,44 @@
 }
 
 #progressBarBack {
+  color: aliceblue;
   border: 1px solid royalblue;
+  
+  background: linear-gradient(to right, #ff5f6e, #9229cc);
+  border-radius: 10px;
+  overflow: hidden;
+  animation: pulse 2s infinite ease-in-out;
 }
 
 #progressBarPause {
+  color: aliceblue;
   border: 1px solid royalblue;
+  margin-right: 1vw;
+  margin-left: 1vw;
+  background: linear-gradient(to right, #ff5f6e, #9229cc);
+  border-radius: 10px;
+  overflow: hidden;
+  animation: pulse 2s infinite ease-in-out;
 }
 
+
 #progressBarSkip {
+  color: aliceblue;
   border: 1px solid royalblue;
+  background: linear-gradient(to right, #ff5f6e, #9229cc);
+  border-radius: 10px;
+  overflow: hidden;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
 }

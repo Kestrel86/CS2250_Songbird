@@ -9,7 +9,6 @@
   margin-top: 5vh;
   width: 30vw;
   height: 100vh;
-  
 }
 
 .PlaylistContainer {
@@ -31,9 +30,9 @@
   display: flex;
   flex-direction: column;
   width: 70vw;
-  box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
-    background: linear-gradient(to right, #fe8c00, #f83600);   
-    border-radius: 15px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to right, #fe8c00, #f83600);
+  border-radius: 15px;
 }
 
 .PlayerContainer {
@@ -49,18 +48,23 @@
   align-items: center;
   height: 10vh;
   box-shadow: 0 0 20px rgba(7, 94, 142, 0.3);
-    border-radius: 8x;
-    transition: transform 0.3s ease-in-out
+  border-radius: 8x;
+  transition: transform 0.3s ease-in-out;
 }
 
-.playlist_entry:hover{
+.playlist_entry:hover {
   transform: scale(1.05);
-  
-  }
+}
 
 .playlist_img {
-  width: 5vw;
+  width: 3.5vw;
   height: 7vh;
+  border-radius: 50%;
+}
+
+.playlist_text {
+  text-align: center;
+  margin-left: 30px;
 }
 
 #tracks {
@@ -111,7 +115,6 @@
 .ControlsContainer {
   display: flex;
   flex-direction: column;
-  
 }
 
 #progressBarBack {

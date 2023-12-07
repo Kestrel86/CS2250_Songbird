@@ -21,7 +21,7 @@ function Contact() {
 
   const axiosFetchData = async (processing) => {
     await axios
-      .get("https://songbird.onrender.com/users")
+      .get("http://localhost:4000/users")
       .then((res) => {
         if (processing) {
           setSelectData(res.data);
@@ -39,7 +39,7 @@ function Contact() {
     };
 
     await axios
-      .post("https://songbird.onrender.com/support/send", postData)
+      .post("http://localhost:4000/support/send", postData)
       .then((res) => setError(<p className="success">{res.data}</p>));
   };
 

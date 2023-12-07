@@ -127,10 +127,12 @@ router.get("/users", async (req, res) => {
 });
 
 router.get("/auth/login", async (req, res) => {
+  //sets the scopes of the website. Spotify api requires these to be manually set and allows for the website to read data and modify data
   var scope =
     "user-read-currently-playing user-read-playback-state user-modify-playback-state streaming user-read-private user-read-email";
   var state = generateRandomString(16);
 
+  //parameters for the user authorization
   var auth_query_parameters = new URLSearchParams({
     response_type: "code",
     client_id: spotify_client_id,
@@ -138,7 +140,7 @@ router.get("/auth/login", async (req, res) => {
     redirect_uri: spotify_redirect_uri,
     state: state,
   });
-
+  // will redirect user to authorize with their account based on which scopes, client id, and other parameters
   return res.redirect(
     "https://accounts.spotify.com/authorize/?" +
       auth_query_parameters.toString()
@@ -147,7 +149,7 @@ router.get("/auth/login", async (req, res) => {
 
 router.get("/auth/callback", (req, res) => {
   var code = req.query.code;
-
+  //the authorizations allowed by the user
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
     form: {
@@ -165,7 +167,8 @@ router.get("/auth/callback", (req, res) => {
     },
     json: true,
   };
-
+  /*if the request was a success then the access token (global variable) is set based on auth token given back by spotify
+    this access token is needed to all fetches from the api and is neccessary for any changes*/
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
       access_token = body.access_token;
